@@ -1,0 +1,94 @@
+# Arcane Docker Compose Configuration
+# Generated at 2026. 2. 8. 오후 1:36:06
+
+services:
+  arcane-database:
+    image: postgres:17-alpine
+    container_name: arcane-database
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - POSTGRES_DB=arcane
+      - POSTGRES_USER=arcane
+      - POSTGRES_PASSWORD=${ARCANE_PG_PASSWORD:?database password required}
+      - TZ=Asia/Seoul
+      - LANG=C.UTF-8
+      - LC_ALL=C.UTF-8
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - arcane-database:/var/lib/postgresql/data
+   # ports:
+   #   - 5432:5432
+    networks:
+      - database
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U arcane -d arcane"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
+  arcane:
+    image: ghcr.io/getarcaneapp/arcane:latest
+    container_name: arcane
+    restart: unless-stopped
+    ports:
+      - 3552:3552
+    volumes:
+      - arcane-data:/app/data
+    env_file: .env
+    environment:
+      - APP_URL=https://arcane.gurm.io
+      - PUID=1000
+      - PGID=1000
+      # DB 연결 정보
+      - POSTGRES_DB=arcane
+      - POSTGRES_USER=arcane
+      - POSTGRES_PASSWORD=${ARCANE_PG_PASSWORD}
+      - DATABASE_URL=postgresql://arcane:${ARCANE_PG_PASSWORD}@arcane-database:5432/arcane
+      # 보안 키
+      - ENCRYPTION_KEY=${ARCANE_ENCRYPTION_KEY:?encryption key required}
+      - JWT_SECRET=${ARCANE_JWT_SECRET:?jwt secret required}
+      # OIDC (Authentik 연동용)
+      - OIDC_ENABLED=true
+      - OIDC_ISSUER=${ARCANE_OIDC_ISSUER}
+      - OIDC_CLIENT_ID=${ARCANE_OIDC_CLIENT_ID}
+      - OIDC_CLIENT_SECRET=${ARCANE_OIDC_CLIENT_SECRET}
+      - OIDC_SCOPES=openid email profile
+      # Docker Proxy 연동
+      - DOCKER_HOST=tcp://docker-proxy:2375
+      # 로깅
+      - LOG_LEVEL=warn
+      - LOG_JSON=true
+    depends_on:
+      arcane-database:
+        condition: service_healthy
+    networks:
+      - database
+      - proxy
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+
+volumes:
+  arcane-data:
+    name: arcane-data
+    driver: local
+  arcane-database:
+    name: arcane-database
+    driver: local
+
+networks:
+  proxy:
+    external: true 
+  database:
+    external: true
