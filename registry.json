@@ -13,11 +13,11 @@
       "version": "1.0.0",
       "author": "kihanyu",
       "compose_url": "https://github.com/gurm-io/arcane-templates/arcane/docker-compose.yaml",
-      "env_url": "https://registry.getarcane.app/templates/affine/.env.example",
-      "documentation_url": "hhttps://github.com/gurm-io/arcane-templates/tree/main/templates/arcane",
+      "env_url": "https://github.com/gurm-io/arcane-templates/arcane/.env.example",
+      "documentation_url": "https://github.com/gurm-io/arcane-templates/arcane/tree/main/templates/arcane",
       "tags": [
         "docker-compose"
       ]
-    },
+    }
   ]
 }
