@@ -1,0 +1,23 @@
+{
+  "$schema": "https://registry.getarcane.app/schema.json",
+  "name": "Arcane Gurm Templates",
+  "description": "Gurm Docker Compose Templates for Arcane",
+  "author": "gurm.io",
+  "url": "https://github.com/gurm-io/arcane-templates",
+  "version": "1.0.0",
+  "templates": [
+    {
+      "id": "arcane",
+      "name": "ARCANE",
+      "description": "Portainer의 기능성과 Dockge의 심플함을 결합한 모던 Docker 관리 UI (무료, 오픈소스, OIDC/멀티호스트 지원)",
+      "version": "1.0.0",
+      "author": "kihanyu",
+      "compose_url": "https://github.com/gurm-io/arcane-templates/arcane/docker-compose.yaml",
+      "env_url": "https://registry.getarcane.app/templates/affine/.env.example",
+      "documentation_url": "hhttps://github.com/gurm-io/arcane-templates/tree/main/templates/arcane",
+      "tags": [
+        "docker-compose"
+      ]
+    },
+  ]
+}
