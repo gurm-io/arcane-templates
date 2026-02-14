@@ -21,8 +21,8 @@
     },
     {
       "id": "traefik",
-      "name": "ARCANE",
-      "description": "Portainer의 기능성과 Dockge의 심플함을 결합한 모던 Docker 관리 UI (무료, 오픈소스, OIDC/멀티호스트 지원)",
+      "name": "TRAEFIK",
+      "description": "클라우드 네이티브 환경에서 마이크로서비스의 복잡한 네트워크 경로를 자동으로 구성하고 관리해주는 오픈소스 HTTP 역방향 프록시(Reverse Proxy) 및 로드 밸런서",
       "version": "1.0.0",
       "author": "kihanyu",
       "compose_url": "https://github.com/gurm-io/arcane-templates/traefik/docker-compose.yaml",
