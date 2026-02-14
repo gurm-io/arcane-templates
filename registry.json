@@ -14,9 +14,22 @@
       "author": "kihanyu",
       "compose_url": "https://github.com/gurm-io/arcane-templates/arcane/docker-compose.yaml",
       "env_url": "https://github.com/gurm-io/arcane-templates/arcane/.env.example",
-      "documentation_url": "https://github.com/gurm-io/arcane-templates/arcane/tree/main/templates/arcane",
+      "documentation_url": "https://github.com/gurm-io/arcane-templates/tree/main/templates/arcane",
       "tags": [
-        "docker-compose"
+        "docker-manager"
+      ]
+    },
+    {
+      "id": "traefik",
+      "name": "ARCANE",
+      "description": "Portainer의 기능성과 Dockge의 심플함을 결합한 모던 Docker 관리 UI (무료, 오픈소스, OIDC/멀티호스트 지원)",
+      "version": "1.0.0",
+      "author": "kihanyu",
+      "compose_url": "https://github.com/gurm-io/arcane-templates/traefik/docker-compose.yaml",
+      "env_url": "https://github.com/gurm-io/arcane-templates/traefik/.env.example",
+      "documentation_url": "https://github.com/gurm-io/arcane-templates/tree/main/templates/traefik",
+      "tags": [
+        "reverse-proxy"
       ]
     }
   ]
