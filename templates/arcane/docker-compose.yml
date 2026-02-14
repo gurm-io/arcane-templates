@@ -1,6 +1,3 @@
-# Arcane Docker Compose Configuration
-# Generated at 2026. 2. 8. 오후 1:36:06
-
 services:
   arcane-database:
     image: postgres:17-alpine
@@ -35,7 +32,7 @@ services:
           memory: 256M
 
   arcane:
-    image: ghcr.io/getarcaneapp/arcane:${ARCANE_VERSION_TAG:-latest}
+    image: ghcr.io/getarcaneapp/arcane:latest
     container_name: arcane
     restart: unless-stopped
     ports:
@@ -50,7 +47,7 @@ services:
       # DB 연결 정보
       - POSTGRES_DB=arcane
       - POSTGRES_USER=arcane
-      - POSTGRES_PASSWORD=${ARCANE_PG_PASSWORD}
+      - POSTGRES_PASSWORD=${ARCANE_PG_PASSWORD:?database password required}
       - DATABASE_URL=postgresql://arcane:${ARCANE_PG_PASSWORD}@arcane-database:5432/arcane
       # 보안 키
       - ENCRYPTION_KEY=${ARCANE_ENCRYPTION_KEY:?encryption key required}
@@ -66,18 +63,17 @@ services:
       # 로깅
       - LOG_LEVEL=warn
       - LOG_JSON=true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.arcane.rule=Host(${ARCANE_HOSTNAME})"
+      - "traefik.http.routers.arcane.entrypoints=web"
+      - "traefik.http.services.arcane.loadbalancer.server.port=3552"
     depends_on:
       arcane-database:
         condition: service_healthy
     networks:
       - database
       - proxy
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-        reservations:
-          memory: 512M
 
 volumes:
   arcane-data:
