@@ -1,3 +1,8 @@
+x-arcane:
+  icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/arcane.svg
+  urls:
+    - https://getarcane.app
+
 services:
   arcane-database:
     image: postgres:17-alpine

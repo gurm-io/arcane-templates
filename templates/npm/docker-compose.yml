@@ -1,3 +1,7 @@
+x-arcane:
+  icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/npm.svg
+  urls:
+    - https://traefik.io
 
 services:
   npm_mysql:

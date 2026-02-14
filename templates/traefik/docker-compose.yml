@@ -1,5 +1,5 @@
 x-arcane:
-  icon: 
+  icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/traefik.svg
   urls:
     - https://traefik.io
 
