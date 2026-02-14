@@ -16,7 +16,8 @@
       "env_url": "https://github.com/gurm-io/arcane-templates/arcane/.env.example",
       "documentation_url": "https://github.com/gurm-io/arcane-templates/tree/main/templates/arcane",
       "tags": [
-        "docker-manager"
+        "Management",
+        "Docker-GUI"
       ]
     },
     {
@@ -29,6 +30,7 @@
       "env_url": "https://github.com/gurm-io/arcane-templates/traefik/.env.example",
       "documentation_url": "https://github.com/gurm-io/arcane-templates/tree/main/templates/traefik",
       "tags": [
+        "Networking",
         "reverse-proxy"
       ]
     }
