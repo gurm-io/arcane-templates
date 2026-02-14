@@ -7,10 +7,10 @@ services:
     env_file:
       - .env
     environment:
-      - MYSQL_ROOT_PASSWORD=${NPM_DB_ROOT_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${NPM_DB_ROOT_PASSWORD:?database password required}
       - MYSQL_DATABASE=npm
       - MYSQL_USER=npm
-      - MYSQL_PASSWORD=${NPM_DB_PASSSWORD}
+      - MYSQL_PASSWORD=${NPM_DB_PASSSWORD:?database password required}
       - TZ=Asia/Seoul
     volumes:
       - npm_mysql:/var/lib/mysql
@@ -39,7 +39,7 @@ services:
       - DB_MYSQL_HOST=npm_mysql
       - DB_MYSQL_PORT=3306
       - DB_MYSQL_USER=npm
-      - DB_MYSQL_PASSWORD=${NPM_DB_PASSSWORD}
+      - DB_MYSQL_PASSWORD=${NPM_DB_PASSSWORD:?database password required}
       - DB_MYSQL_NAME=npm
       - TZ=Asia/Seoul
     deploy:
