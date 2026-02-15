@@ -7,7 +7,7 @@ services:
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared
-    command: tunnel run --token ${Psecrets.CLOUDFLARED_TOKEN}}
+    command: tunnel run --token ${secrets.CLOUDFLARED_TOKEN}}
     environment:
       - TZ=Asia/Seoul
     networks:
