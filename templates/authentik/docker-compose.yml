@@ -1,0 +1,157 @@
+x-arcane:
+  icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/authentik.svg
+  urls:
+    - https://goauthentik.io
+
+services:
+  authentik-database:
+    image: postgres:17-alpine
+    container_name: authentik-database
+    restart: unless-stopped
+    # ports:
+    #   - "5432:5432"  # PostgreSQL (내부 통신만 사용, 외부 노출 불필요)
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${AUTHENTIK_PG_DB:-authentik}
+      POSTGRES_USER: ${AUTHENTIK_PG_USER:-authentik}
+      POSTGRES_PASSWORD: ${AUTHENTIK_PG_PASS:?database password required}
+      # 인코딩 설정 추가
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
+    command:
+      - postgres
+      - -c
+      - max_connections=200
+      - -c
+      - shared_buffers=256MB
+    healthcheck:
+      interval: 30s
+      retries: 5
+      start_period: 20s
+      test:
+      - CMD-SHELL
+      - pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 256M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - authentik_database:/var/lib/postgresql/data
+    networks:
+      - internal
+
+  authentik-server:
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG}
+    container_name: authentik-server
+    command: server
+    restart: unless-stopped
+    ports:
+    #   - "9000:9000"  # Authentik Web UI (Traefik을 통해 접근, 직접 노출 불필요)
+      - "8443:9443"  # Authentik HTTPS (미사용)
+    depends_on:
+      authentik-database:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      AUTHENTIK_INSECURE: "false"
+      AUTHENTIK_POSTGRESQL__HOST: authentik-database
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASS:?secret key required}
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
+      AUTHENTIK_HOST: ${AUTHENTIK_DOMAIN}
+      AUTHENTIK_COOKIE_DOMAIN: gurm.io
+      AUTHENTIK_LISTEN__TRUSTED_PROXY_IPS: "127.0.0.1,172.18.0.2/16,10.0.0.0/8,192.168.0.0/16,112.186.109.55/32"
+      AUTHENTIK_LOG_LEVEL: ${AUTHENTIK_LOG_LEVEL:-warn}
+    healthcheck:
+      test: ["CMD", "ak", "healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - authentik_data:/data
+      - authentik_templates:/templates
+    networks:
+      - proxy
+      - internal
+    
+  authentik-worker:
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG}
+    container_name: authentik-worker
+    command: worker
+    restart: unless-stopped
+    user: root # Docker Socket 접근을 위해 root 필요
+    # ports: (Worker는 포트 노출 없음)
+    depends_on:
+      authentik-database:
+        condition: service_healthy
+      authentik-server:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      DOCKER_HOST: tcp://docker-proxy:2375
+      AUTHENTIK_POSTGRESQL__HOST: authentik-database
+      AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB:-authentik}
+      AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER:-authentik}
+      AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASS:?database password required}
+      AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
+      AUTHENTIK_LOG_LEVEL: ${AUTHENTIK_LOG_LEVEL:-info}
+    healthcheck:
+      test: ["CMD", "ak", "healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+    - authentik_data:/data
+    - authentik_certs:/certs
+    - authentik_templates:/templates
+    networks:
+    - proxy
+    - internal
+
+volumes:
+    authentik_database:
+      name: authentik_database
+      driver: local
+    authentik_data:
+      name: authentik_data
+      driver: local
+    authentik_certs:
+      name: authentik_certs
+      driver: local
+    authentik_templates:
+      name: authentik_templates
+      driver: local
+
+networks:
+  proxy:
+    external: true
+  internal:
+    internal: true

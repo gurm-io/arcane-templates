@@ -16,8 +16,9 @@
       "env_url": "https://raw.githubusercontent.com/gurm-io/arcane-templates/main/templates/arcane/.env.example",
       "documentation_url": "https://raw.githubusercontent.com/gurm-io/arcane-templates/main/templates/arcane",
       "tags": [
-        "Management",
-        "Docker-GUI"
+        "ContainerManagement",
+        "Docker",
+        "Dashboard"
       ]
     },
     {
@@ -31,8 +32,8 @@
       "documentation_url": "https://github.com/gurm-io/arcane-templates/tree/main/templates/traefik",
       "tags": [
         "Networking",
-        "Reverse-Proxy",
-        "Gateway"
+        "ReverseProxy",
+        "LoadBalancer"
       ]
     },
     {
@@ -46,7 +47,22 @@
       "documentation_url": "https://github.com/gurm-io/arcane-templates/tree/main/templates/cloudflared",
       "tags": [
         "Networking",
+        "ReverseProxy",
         "Tunnel"
+      ]
+    },
+    {
+      "id": "authentik",
+      "name": "Authentik",
+      "description": "오픈소스 IDaaS(Identity as a Service)로, 셀프호스팅 서비스들에 SSO/MFA/OAuth2 인증을 통합 제공하는 ID 관리 플랫폼",
+      "version": "1.0.0",
+      "author": "Shawn Yu",
+      "compose_url": "https://raw.githubusercontent.com/gurm-io/arcane-templates/main/templates/authentik/docker-compose.yml",
+      "env_url": "https://raw.githubusercontent.com/gurm-io/arcane-templates/main/templates/authentik/.env.example",
+      "documentation_url": "https://github.com/gurm-io/arcane-templates/tree/main/templates/authentik",
+      "tags": [
+        "IdP",
+        "IAM"
       ]
     }
   ]
