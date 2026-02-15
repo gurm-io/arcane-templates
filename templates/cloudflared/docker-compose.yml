@@ -10,8 +10,6 @@ services:
     command: tunnel run --token ${CLOUDFLARED_TOKEN}
     environment:
       - TZ=Asia/Seoul
-    depends_on:
-      - traefik
     networks:
       - proxy
     restart: unless-stopped
