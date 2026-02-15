@@ -1,0 +1,17 @@
+services:
+  portal:
+    image: busybox:latest
+    container_name: portal
+    command: "tail -f /dev/null"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nas.rule=Host(`portal.gurm.io`)"
+      - "traefik.http.routers.nas.entrypoints=web"
+      - "traefik.http.services.nas.loadbalancer.server.url=https://192.168.10.92:9999"
+    networks:
+      - proxy
+    restart: unless-stopped
+
+networks:
+  proxy:
+    external: true
