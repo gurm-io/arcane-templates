@@ -1,7 +1,7 @@
 x-arcane:
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/authentik.svg
   urls:
-    - https://goauthentik.io
+    - https://sso.gurm.io
 
 services:
   authentik-database:
@@ -56,7 +56,7 @@ services:
     env_file:
       - .env
     environment:
-      AUTHENTIK_INSECURE: "false"
+      AUTHENTIK_INSECURE: "true"
       AUTHENTIK_POSTGRESQL__HOST: authentik-database
       AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB:-authentik}
       AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER:-authentik}
@@ -64,7 +64,7 @@ services:
       AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
       AUTHENTIK_HOST: ${AUTHENTIK_DOMAIN}
       AUTHENTIK_COOKIE_DOMAIN: gurm.io
-      AUTHENTIK_LISTEN__TRUSTED_PROXY_IPS: "127.0.0.1,172.18.0.2/16,10.0.0.0/8,192.168.0.0/16,112.186.109.55/32"
+      AUTHENTIK_LISTEN__TRUSTED_PROXY_IPS: "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16"
       AUTHENTIK_LOG_LEVEL: ${AUTHENTIK_LOG_LEVEL:-warn}
     labels:
       - "traefik.enable=true"
@@ -107,7 +107,7 @@ services:
       AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER:-authentik}
       AUTHENTIK_POSTGRESQL__PASSWORD: ${AUTHENTIK_PG_PASS:?database password required}
       AUTHENTIK_SECRET_KEY: ${AUTHENTIK_SECRET_KEY:?secret key required}
-      AUTHENTIK_LOG_LEVEL: ${AUTHENTIK_LOG_LEVEL:-info}
+      AUTHENTIK_LOG_LEVEL: ${AUTHENTIK_LOG_LEVEL:-warn}
     healthcheck:
       test: ["CMD", "ak", "healthcheck"]
       interval: 30s

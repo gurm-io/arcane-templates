@@ -1,7 +1,7 @@
 x-arcane:
   icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/traefik.svg
   urls:
-    - https://traefik.io
+    - https://traefik.gurm.io
 
 services: 
   traefik:
@@ -24,18 +24,6 @@ services:
     networks:
       - proxy
       - docker-socket
-    restart: unless-stopped
- 
-  whoami:
-    image: traefik/whoami:latest
-    container_name: whoami
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`${WHOAMI_HOST_NAME}`)"
-      - "traefik.http.routers.whoami.entrypoints=web"
-      - "traefik.http.services.whoami.loadbalancer.server.port=80"
-    networks:
-      - proxy
     restart: unless-stopped
 
 networks:

@@ -1,7 +1,7 @@
 x-arcane:
   icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/arcane.svg
   urls:
-    - https://getarcane.app
+    - https://arcane.gurm.io
 
 services:
   arcane-database:
