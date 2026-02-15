@@ -42,9 +42,9 @@ services:
     networks:
       - internal
 
-  authentik-server:
+  authentik:
     image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG}
-    container_name: authentik-server
+    container_name: authentik
     command: server
     restart: unless-stopped
     #ports:
@@ -68,9 +68,9 @@ services:
       AUTHENTIK_LOG_LEVEL: ${AUTHENTIK_LOG_LEVEL:-warn}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`${AUTHENTIK_HOST_NAME}`)"
-      - "traefik.http.routers.whoami.entrypoints=web"
-      - "traefik.http.services.whoami.loadbalancer.server.port=9000"
+      - "traefik.http.routers.authentik.rule=Host(`${AUTHENTIK_HOST_NAME}`)"
+      - "traefik.http.routers.authentik.entrypoints=web"
+      - "traefik.http.services.authentik.loadbalancer.server.port=9000"
     healthcheck:
       test: ["CMD", "ak", "healthcheck"]
       interval: 30s
