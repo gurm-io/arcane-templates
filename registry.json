@@ -55,7 +55,7 @@
       "id": "authentik",
       "name": "Authentik",
       "description": "오픈소스 IDaaS(Identity as a Service)로, 셀프호스팅 서비스들에 SSO/MFA/OAuth2 인증을 통합 제공하는 ID 관리 플랫폼",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "author": "Shawn Yu",
       "compose_url": "https://raw.githubusercontent.com/gurm-io/arcane-templates/main/templates/authentik/docker-compose.yml",
       "env_url": "https://raw.githubusercontent.com/gurm-io/arcane-templates/main/templates/authentik/.env.example",

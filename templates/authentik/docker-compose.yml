@@ -40,7 +40,7 @@ services:
     volumes:
       - authentik_database:/var/lib/postgresql/data
     networks:
-      - internal
+      - database
 
   authentik:
     image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG}
@@ -86,7 +86,7 @@ services:
       - authentik_templates:/templates
     networks:
       - proxy
-      - internal
+      - database
     
   authentik-worker:
     image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG}
@@ -102,7 +102,6 @@ services:
         condition: service_healthy
     env_file: .env
     environment:
-      DOCKER_HOST: tcp://docker-proxy:2375
       AUTHENTIK_POSTGRESQL__HOST: authentik-database
       AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB:-authentik}
       AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER:-authentik}
@@ -126,7 +125,7 @@ services:
     - authentik_templates:/templates
     networks:
     - proxy
-    - internal
+    - database
 
 volumes:
     authentik_database:
@@ -145,5 +144,5 @@ volumes:
 networks:
   proxy:
     external: true
-  internal:
-    internal: true
+  database:
+    external: true
