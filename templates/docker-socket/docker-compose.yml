@@ -42,5 +42,4 @@ services:
 
 networks:
   docker-socket:
-    name: docker-socket
     external: true
