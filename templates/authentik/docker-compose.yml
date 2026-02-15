@@ -98,7 +98,7 @@ services:
     depends_on:
       authentik-database:
         condition: service_healthy
-      authentik-server:
+      authentik:
         condition: service_healthy
     env_file: .env
     environment:
