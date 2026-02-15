@@ -25,7 +25,7 @@
       "id": "traefik",
       "name": "Traefik",
       "description": "클라우드 네이티브 환경에서 마이크로서비스의 복잡한 네트워크 경로를 자동으로 구성하고 관리해주는 오픈소스 HTTP 역방향 프록시(Reverse Proxy) 및 로드 밸런서",
-      "version": "1.0.5",
+      "version": "1.0.6",
       "author": "Shawn Yu",
       "compose_url": "https://raw.githubusercontent.com/gurm-io/arcane-templates/main/templates/traefik/docker-compose.yml",
       "env_url": "https://raw.githubusercontent.com/gurm-io/arcane-templates/main/templates/traefik/.env.example",
