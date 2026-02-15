@@ -1,7 +1,7 @@
 x-arcane:
   icon: https://cdn.jsdelivr.net/gh/selfhst/icons@main/svg/authentik.svg
   urls:
-    - https://sso.gurm.io
+    - https://goauthentik.io
 
 services:
   authentik-database:
@@ -68,7 +68,7 @@ services:
       AUTHENTIK_LOG_LEVEL: ${AUTHENTIK_LOG_LEVEL:-warn}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.authentik.rule=Host(`${AUTHENTIK_HOST_NAME}`)"
+      - "traefik.http.routers.authentik.rule=Host(`sso.gurm.io`)"
       - "traefik.http.routers.authentik.entrypoints=web"
       - "traefik.http.services.authentik.loadbalancer.server.port=9000"
     healthcheck:
