@@ -3,72 +3,43 @@ x-arcane:
   urls:
     - https://traefik.io
 
-services:
-  init:
-    image: alpine:latest
-    container_name: traefik-init
-    volumes:
-      - traefik-acme:/acme
-    command: >
-      sh -c "touch /acme/acme.json && chmod 600 /acme/acme.json"
-
+services: 
   traefik:
-    image: traefik:v3
+    image: traefik:latest
     container_name: traefik
-    restart: unless-stopped
-    depends_on:
-      - init
-    security_opt:
-      - no-new-privileges:true
-    # ports:
-    #   - "80:80"
-    #   - "443:443"
-    #   - "8080:8080" # The Traefik dashboard port
-    volumes:
-      - traefik-data:/etc/traefik/traefik.yml:ro # Static configuration file
-      - traefik-acme:/acme.json # File for Let's Encrypt certificates
-    # Static configuration can also be set via command line arguments
     command:
-      - --log.level=WARN
       - --api.dashboard=true
-      - --api.insecure=true # Insecure API for development, access at http://localhost:8080/dashboard/
       - --providers.docker=true
-      - --providers.docker.exposedbydefault=false # Only expose containers with specific labels
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=proxy
+      - --providers.docker.endpoint=tcp://docker-socket:2375
       - --entrypoints.web.address=:80
-      #- --entrypoints.websecure.address=:443
-      # Configure Let's Encrypt (ACME)
-      # - --certificatesresolvers.myresolver.acme.httpchallenge=true
-      # - --certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web
-      # - --certificatesresolvers.myresolver.acme.email=your@email.com
-      # - --certificatesresolvers.myresolver.acme.storage=/acme.json
+    environment:
+      - TZ=Asia/Seoul
     labels:
-      # Dynamic configuration via labels
       - "traefik.enable=true"
-      - "traefik.http.routers.traefik.rule=Host(${TRAEFIK_HOSTNAME})" # Replace with your domain
-      - "traefik.http.routers.traefik.entrypoints=web"
-      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+      - "traefik.http.routers.dashboard.rule=Host(${TRAEFIK_HOST_NAME})"
+      - "traefik.http.routers.dashboard.entrypoints=web"
+      - "traefik.http.routers.dashboard.service=api@internal"
     networks:
       - proxy
-
-  # Sample whoami service
+      - docker-socket
+    restart: unless-stopped
+ 
   whoami:
-    image: traefik/whoami
+    image: traefik/whoami:latest
     container_name: whoami
     labels:
-      # Dynamic configuration via labels
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(${WHOAMI_HOSTNAME})" # Replace with your domain
+      - "traefik.http.routers.whoami.rule=Host(${WHOAMI_HOST_NAME})"
       - "traefik.http.routers.whoami.entrypoints=web"
       - "traefik.http.services.whoami.loadbalancer.server.port=80"
     networks:
       - proxy
-
-volumes:
-  traefik-data:
-    name: traefik-data
-  traefik-acme:
-    name: traefik-acme
+    restart: unless-stopped
 
 networks:
   proxy:
+    external: true
+  docker-proxy:
     external: true
