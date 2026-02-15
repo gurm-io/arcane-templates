@@ -1,7 +1,7 @@
 x-arcane:
   icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/traefik.svg
   urls:
-    - https://traefik.gurm.io
+    - https://traefik.io
 
 services: 
   traefik:
@@ -14,6 +14,7 @@ services:
       - "--providers.docker.network=proxy"
       - "--providers.docker.endpoint=tcp://docker-socket:2375"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.forwardedHeaders.trustedIPs=172.16.0.0/12,10.0.0.0/8,192.168.0.0/16"
     environment:
       - TZ=Asia/Seoul
     labels:
