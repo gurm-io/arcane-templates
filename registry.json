@@ -2,7 +2,7 @@
   "$schema": "https://registry.getarcane.app/schema.json",
   "name": "Arcane Gurm Templates",
   "description": "Gurm Docker Compose Templates for Arcane",
-  "author": "gurm.io",
+  "author": "Shawn Yu",
   "url": "https://github.com/gurm-io/arcane-templates",
   "version": "1.0.0",
   "templates": [
@@ -11,7 +11,7 @@
       "name": "Arcane",
       "description": "Portainer의 기능성과 Dockge의 심플함을 결합한 모던 Docker 관리 UI (무료, 오픈소스, OIDC/멀티호스트 지원)",
       "version": "1.0.0",
-      "author": "kihanyu",
+      "author": "Shawn Yu",
       "compose_url": "https://github.com/gurm-io/arcane-templates/templates/arcane/docker-compose.yml",
       "env_url": "https://github.com/gurm-io/arcane-templates/templates/arcane/.env.example",
       "documentation_url": "https://github.com/gurm-io/arcane-templates/tree/main/templates/arcane",
@@ -25,13 +25,28 @@
       "name": "Traefik",
       "description": "클라우드 네이티브 환경에서 마이크로서비스의 복잡한 네트워크 경로를 자동으로 구성하고 관리해주는 오픈소스 HTTP 역방향 프록시(Reverse Proxy) 및 로드 밸런서",
       "version": "1.0.0",
-      "author": "kihanyu",
+      "author": "Shawn Yu",
       "compose_url": "https://github.com/gurm-io/arcane-templates/templates/traefik/docker-compose.yml",
       "env_url": "https://github.com/gurm-io/arcane-templates/templates/traefik/.env.example",
       "documentation_url": "https://github.com/gurm-io/arcane-templates/tree/main/templates/traefik",
       "tags": [
         "Networking",
-        "reverse-proxy"
+        "Reverse-Proxy",
+        "Gateway"
+      ]
+    },
+    {
+      "id": "cloudflared",
+      "name": "CloudFalred",
+      "description": "Cloudflare의 아웃바운드 터널 클라이언트로, NAS에 인바운드 포트를 열지 않고도 외부에서 내부 서비스에 안전하게 접근할 수 있게 해주는 데몬",
+      "version": "1.0.0",
+      "author": "Shawn Yu",
+      "compose_url": "https://github.com/gurm-io/arcane-templates/templates/cloudflared/docker-compose.yml",
+      "env_url": "https://github.com/gurm-io/arcane-templates/templates/cloudflared/.env.example",
+      "documentation_url": "https://github.com/gurm-io/arcane-templates/tree/main/templates/cloudflared",
+      "tags": [
+        "Networking",
+        "Tunnel"
       ]
     }
   ]
