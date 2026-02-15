@@ -8,6 +8,7 @@ services:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared
     command: tunnel run --token ${CLOUDFLARED_TOKEN}
+    env_file: .env
     environment:
       - TZ=Asia/Seoul
     networks:
