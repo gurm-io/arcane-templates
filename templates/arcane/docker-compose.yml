@@ -29,12 +29,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-    deploy:
-      resources:
-        limits:
-          memory: 512M
-        reservations:
-          memory: 256M
 
   arcane:
     image: ghcr.io/getarcaneapp/arcane:latest
@@ -46,7 +40,7 @@ services:
       - arcane-data:/app/data
     env_file: .env
     environment:
-      - APP_URL=https://arcane.gurm.io
+      - APP_URL=${ARCANE_HOSTNAME}
       - PUID=1000
       - PGID=1000
       # DB 연결 정보
@@ -64,13 +58,13 @@ services:
       - OIDC_CLIENT_SECRET=${ARCANE_OIDC_CLIENT_SECRET}
       - OIDC_SCOPES=openid email profile
       # Docker Proxy 연동
-      - DOCKER_HOST=tcp://docker-proxy:2375
+      - DOCKER_HOST=tcp://docker-socket:2375
       # 로깅
       - LOG_LEVEL=warn
       - LOG_JSON=true
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.arcane.rule=Host(${ARCANE_HOSTNAME})"
+      - "traefik.http.routers.arcane.rule=Host(`${ARCANE_HOSTNAME}`)"
       - "traefik.http.routers.arcane.entrypoints=web"
       - "traefik.http.services.arcane.loadbalancer.server.port=3552"
     depends_on:
@@ -79,6 +73,7 @@ services:
     networks:
       - database
       - proxy
+      - docker-socket
 
 volumes:
   arcane-data:
@@ -92,4 +87,6 @@ networks:
   proxy:
     external: true 
   database:
+    external: true
+  docker-socket:
     external: true
