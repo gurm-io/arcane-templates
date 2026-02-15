@@ -10,8 +10,6 @@ services:
     restart: unless-stopped
     # ports:
     #   - "5432:5432"  # PostgreSQL (내부 통신만 사용, 외부 노출 불필요)
-    env_file:
-      - .env
     environment:
       POSTGRES_DB: ${AUTHENTIK_PG_DB:-authentik}
       POSTGRES_USER: ${AUTHENTIK_PG_USER:-authentik}
@@ -43,7 +41,7 @@ services:
       - database
 
   authentik:
-    image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG}
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG:-2025.10}
     container_name: authentik
     command: server
     restart: unless-stopped
@@ -53,8 +51,6 @@ services:
     depends_on:
       authentik-database:
         condition: service_healthy
-    env_file:
-      - .env
     environment:
       AUTHENTIK_INSECURE: "true"
       AUTHENTIK_POSTGRESQL__HOST: authentik-database
@@ -68,7 +64,7 @@ services:
       AUTHENTIK_LOG_LEVEL: ${AUTHENTIK_LOG_LEVEL:-warn}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.authentik.rule=Host(`sso.gurm.io`)"
+      - "traefik.http.routers.authentik.rule=Host(`${AUTHENTIK_HOST_NAME}`)"
       - "traefik.http.routers.authentik.entrypoints=web"
       - "traefik.http.services.authentik.loadbalancer.server.port=9000"
     healthcheck:
@@ -89,7 +85,7 @@ services:
       - database
     
   authentik-worker:
-    image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG}
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_TAG:-2025.10}
     container_name: authentik-worker
     command: worker
     restart: unless-stopped
