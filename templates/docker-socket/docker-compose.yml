@@ -1,0 +1,46 @@
+x-arcane:
+  icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/docker.svg
+  urls:
+    - https://github.com/Tecnativa/docker-socket-proxy
+
+services:
+  docker-socket:
+    image: tecnativa/docker-socket-proxy:latest
+    container_name: docker-socket
+    environment:
+      # Traefik 필수 권한
+      - CONTAINERS=1        # 컨테이너 목록 조회 (라우팅 대상 탐색)
+      - NETWORKS=1           # 네트워크 정보 조회 (컨테이너 IP 확인)
+      - EVENTS=1             # Docker 이벤트 수신 (컨테이너 시작/중지 감지)
+      # Arcane 필수 권한
+      - EXEC=1               # 컨테이너 내 명령 실행
+      - IMAGES=1             # 이미지 관리
+      - VOLUMES=1            # 볼륨 관리
+      - POST=1               # 생성/수정 작업 (Arcane 컨테이너 관리용)
+      # 시스템 정보
+      - PING=1               # 헬스체크
+      - VERSION=1            # Docker 버전 정보
+      - INFO=1               # Docker 시스템 정보
+      # 보안 비활성화
+      - AUTH=0
+      - SECRETS=0
+      - BUILD=0
+      - COMMIT=0
+      - CONFIGS=0
+      - DISTRIBUTION=0
+      - NODES=0
+      - PLUGINS=0
+      - SERVICES=0
+      - SESSION=0
+      - SWARM=0
+      - TASKS=0
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - docker-socket
+    restart: unless-stopped
+
+networks:
+  docker-socket:
+    name: docker-socket
+    internal: true
