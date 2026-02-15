@@ -32,12 +32,6 @@ services:
       test:
       - CMD-SHELL
       - pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-        reservations:
-          memory: 256M
     logging:
       driver: json-file
       options:
@@ -53,9 +47,9 @@ services:
     container_name: authentik-server
     command: server
     restart: unless-stopped
-    ports:
-    #   - "9000:9000"  # Authentik Web UI (Traefik을 통해 접근, 직접 노출 불필요)
-      - "8443:9443"  # Authentik HTTPS (미사용)
+    #ports:
+    #  - "9000:9000"  # Authentik Web UI (Traefik을 통해 접근, 직접 노출 불필요)
+    #  - "9443:9443"  # Authentik HTTPS (미사용)
     depends_on:
       authentik-database:
         condition: service_healthy
@@ -72,18 +66,16 @@ services:
       AUTHENTIK_COOKIE_DOMAIN: gurm.io
       AUTHENTIK_LISTEN__TRUSTED_PROXY_IPS: "127.0.0.1,172.18.0.2/16,10.0.0.0/8,192.168.0.0/16,112.186.109.55/32"
       AUTHENTIK_LOG_LEVEL: ${AUTHENTIK_LOG_LEVEL:-warn}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`${AUTHENTIK_HOST_NAME}`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
+      - "traefik.http.services.whoami.loadbalancer.server.port=9000"
     healthcheck:
       test: ["CMD", "ak", "healthcheck"]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 30s
-    deploy:
-      resources:
-        limits:
-          memory: 1G
-        reservations:
-          memory: 512M
     logging:
       driver: json-file
       options:
@@ -101,7 +93,7 @@ services:
     container_name: authentik-worker
     command: worker
     restart: unless-stopped
-    user: root # Docker Socket 접근을 위해 root 필요
+    #user: root # Docker Socket 접근을 위해 root 필요
     # ports: (Worker는 포트 노출 없음)
     depends_on:
       authentik-database:
