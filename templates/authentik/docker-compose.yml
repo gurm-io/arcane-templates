@@ -100,7 +100,6 @@ services:
         condition: service_healthy
       authentik:
         condition: service_healthy
-    env_file: .env
     environment:
       DOCKER_HOST: tcp://docker-socket:2375
       AUTHENTIK_POSTGRESQL__HOST: authentik-database
