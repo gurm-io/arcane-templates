@@ -41,5 +41,5 @@ services:
 networks:
   proxy:
     external: true
-  docker-proxy:
+  docker-socket:
     external: true
