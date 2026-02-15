@@ -8,13 +8,13 @@ services:
     image: traefik:latest
     container_name: traefik
     command:
-      - --api.dashboard=true
-      - --providers.docker=true
-      - --providers.docker.defaultRule=Host(`{{ normalize .Name }}.${HOST_NAME}`)
-      - --providers.docker.exposedbydefault=false
-      - --providers.docker.network=proxy
-      - --providers.docker.endpoint=tcp://docker-socket:2375
-      - --entrypoints.web.address=:80
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.defaultRule=Host(`{{ normalize .Name }}.${HOST_NAME}`)"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=proxy"
+      - "--providers.docker.endpoint=tcp://docker-socket:2375"
+      - "--entrypoints.web.address=:80"
     environment:
       - TZ=Asia/Seoul
     labels:
