@@ -102,6 +102,7 @@ services:
         condition: service_healthy
     env_file: .env
     environment:
+      DOCKER_HOST: tcp://docker-socket:2375
       AUTHENTIK_POSTGRESQL__HOST: authentik-database
       AUTHENTIK_POSTGRESQL__NAME: ${AUTHENTIK_PG_DB:-authentik}
       AUTHENTIK_POSTGRESQL__USER: ${AUTHENTIK_PG_USER:-authentik}
@@ -126,6 +127,7 @@ services:
     networks:
     - proxy
     - database
+    - docker-socket
 
 volumes:
     authentik_database:
@@ -145,4 +147,6 @@ networks:
   proxy:
     external: true
   database:
+    external: true
+  docker-socket:
     external: true
